@@ -1,5 +1,5 @@
 import axios from "axios";
-import { JSXElementConstructor, useState } from "react";
+import { useState } from "react";
 import { TodoItems } from "./Todos";
 
 interface itemFunction {
@@ -29,23 +29,26 @@ const TodosItem = ({
   const openDialog = () => {
     let myModal: any = document.querySelector(".myDialog");
     myModal.showModal();
-    console.log(id);
+    localStorage.setItem("currentTodo", JSON.stringify(id));
   };
 
   const closeDialog = () => {
     let myModal: any = document.querySelector(".myDialog");
     myModal.close();
-    console.log(id);
+    let currentID = JSON.parse(`${localStorage.getItem("currentTodo")}`);
 
-    // axios
-    //   .patch(`http://localhost:8080/todos/${id}`, { title: value })
-    //   .then(getTodos);
+    if (value) {
+      axios
+        .patch(`http://localhost:8080/todos/${currentID}`, { title: value })
+        .then(getTodos);
+    }
     setValue("");
   };
 
   const cancelDialog = () => {
     let myModal: any = document.querySelector(".myDialog");
     myModal.close();
+    setValue("");
   };
 
   return (
